@@ -4,20 +4,9 @@ import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-type ProjectDoc = {
-  id: string;
-  description: string;
-  title: string;
-};
-
-type ChatProps = {
-  projects: ProjectDoc[] | null;
-};
-
-export default function Chat({ projects }: ChatProps) {
+export default function Chat() {
   const [input, setInput] = useState("");
   const { messages, sendMessage } = useChat();
-  console.log("Projects:", projects);
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto stretch">
       {messages.map((message) => (
@@ -36,6 +25,19 @@ export default function Chat({ projects }: ChatProps) {
                     ) : (
                       <ReactMarkdown>{part.text}</ReactMarkdown>
                     )}
+                  </div>
+                );
+              case "tool-addProject":
+              case "tool-getInformation":
+                return (
+                  <div key={`${message.id}-${i}`}>
+                    <p>
+                      call{part.state === "output-available" ? "ed" : "ing"}{" "}
+                      tool: {part.type}
+                    </p>
+                    <pre className="my-4 bg-neutral-900 p-2 rounded-sm">
+                      {JSON.stringify(part.input, null, 2)}
+                    </pre>
                   </div>
                 );
             }
