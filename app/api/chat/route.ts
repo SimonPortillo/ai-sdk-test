@@ -7,6 +7,7 @@ import {
 } from "ai";
 import { z } from "zod";
 import { createProject } from "@/lib/actions/projects";
+import { findRelevantContent } from "@/lib/ai/embeddings";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -39,6 +40,13 @@ export async function POST(req: Request) {
         }),
         execute: async ({ description, title }) =>
           createProject({ project_desc: description, project_title: title }),
+      }),
+      getInformation: tool({
+        description: `get project information from your knowledge base to answer questions.`,
+        inputSchema: z.object({
+          question: z.string().describe("the users question"),
+        }),
+        execute: async ({ question }) => findRelevantContent(question),
       }),
     },
   });

@@ -32,8 +32,8 @@ export const createProject = async (input: NewProjectParams) => {
       throw new Error(projectError.message);
     }
 
-    // Generate embeddings from project description
-    const embeddings = await generateEmbeddings(project_desc);
+    // Generate embeddings with title context
+    const embeddings = await generateEmbeddings(project_title, project_desc);
 
     // Insert embeddings
     const { error: embeddingsError } = await supabase.from("embeddings").insert(
