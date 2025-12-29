@@ -16,8 +16,8 @@ export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = streamText({
-    model: "openai/gpt-5-nano",
-    system: `You are a helpful assistant. You can answer general questions as well as questions about projects in your knowledge base.`,
+    model: "openai/gpt-5-mini",
+    system: `You are a helpful assistant. You can only answer questions about projects in your knowledge base. Do not make up information about projects that are not in the knowledge base or make up follow up questions that you cannot answer using the tools provided. Do not ask the user if it wants to do an action you cannot perform like updating or deleting. If you are unsure about a question, respond with "I dunno".`,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
     tools: {
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
           createProject({ project_desc: description, project_title: title }),
       }),
       getInformation: tool({
-        description: `get project information from your knowledge base to answer questions.`,
+        description: `get project information from your knowledge base to answer questions. summarize the relevant information you find to best answer the user's question.`,
         inputSchema: z.object({
           question: z.string().describe("the users question"),
         }),
