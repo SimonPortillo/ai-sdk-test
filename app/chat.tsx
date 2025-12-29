@@ -38,7 +38,7 @@ export default function Chat() {
                       call{part.state === "output-available" ? "ed" : "ing"}{" "}
                       tool: {part.type}
                     </p>
-                    <pre className="whitespace-pre-wrap my-4 bg-neutral-900 p-2 rounded-sm">
+                    <pre className="whitespace-pre-wrap my-4 bg-neutral-100 dark:bg-neutral-900 p-2 rounded-sm">
                       {JSON.stringify(part.input, null, 2)}
                     </pre>
                   </div>

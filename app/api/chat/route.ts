@@ -17,14 +17,12 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: "openai/gpt-5-nano",
-    system: `You are a helpful assistant. Check your knowledge base before answering any questions.
-    Only respond to questions using information from tool calls.
-    if no relevant information is found in the tool calls, respond, "Sorry, I don't know."`,
+    system: `You are a helpful assistant. You can answer general questions as well as questions about projects in your knowledge base.`,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
     tools: {
       addProject: tool({
-        description: `add a project to your knowledge base.
+        description: `Add a project to your knowledge base.
           If the user provides information about a project unprompted, use this tool without asking for confirmation.`,
         inputSchema: z.object({
           description: z
